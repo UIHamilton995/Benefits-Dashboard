@@ -162,8 +162,6 @@ const BenefitsDashboard = ({
                     </span>
                   </th>
                   <th className="p-12 text-left">Limit</th>
-                  {/* <th className="p-4 text-right">Used</th>
-                  <th className="p-4 text-right">Balance</th> */}
                 </tr>
               </thead>
               <tbody>
@@ -186,12 +184,6 @@ const BenefitsDashboard = ({
                       <td className="p-4 text-left font-medium text-gray-700">
                         {formatCurrency(benefit.Limit)}
                       </td>
-                      {/* <td className="p-4 text-right font-medium text-gray-700">
-                        {formatCurrency(benefit.Used)}
-                      </td>
-                      <td className="p-4 text-right font-medium text-gray-700">
-                        {formatCurrency(benefit.Balance)}
-                      </td> */}
                     </tr>
                   ))
                 ) : (

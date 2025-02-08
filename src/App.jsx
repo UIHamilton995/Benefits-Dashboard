@@ -1,256 +1,20 @@
-// import { BrowserRouter, Routes, Route, useNavigate, useParams } from 'react-router-dom';
-// import { useState, useEffect, useCallback } from 'react';
-// import axios from 'axios';
-// import EnrolleeModal from './components/EnrolleeModal';
-// import BenefitsDashboard from './components/BenefitsDashboard';
-
-// // Custom hook to fetch benefits with progressive loading
-// const useBenefits = (id) => {
-//   const [dentalBenefits, setDentalBenefits] = useState(null);
-//   const [opticalBenefits, setOpticalBenefits] = useState(null);
-//   const [lensFrames, setLensFrames] = useState(null);
-//   const [surgery, setSurgery] = useState(null);
-//   const [vaccines, setVaccines] = useState(null);
-//   const [majorDisease, setMajorDisease] = useState(null);
-//   const [loading, setLoading] = useState(true);
-//   const [error, setError] = useState(null);
-
-//   // Separate async fetch functions for each benefit type
-//   const fetchDentalBenefits = useCallback(async (cifNo) => {
-//     try {
-//       const response = await axios.get(
-//         `https://prognosis-api.leadwayhealth.com/api/EnrolleeProfile/GetEnrolleeBenefitsByCif_Dental?cifno=${cifNo}`
-//       );
-//       setDentalBenefits(response.data);
-//     } catch (err) {
-//       console.error('Dental Benefits Fetch Error:', err);
-//       // Optionally set a partial error for dental benefits
-//       setError(prevError => ({
-//         ...prevError,
-//         dental: err
-//       }));
-//     }
-//   }, []);
-
-//   const fetchOpticalBenefits = useCallback(async (cifNo) => {
-//     try {
-//       const response = await axios.get(
-//         `https://prognosis-api.leadwayhealth.com/api/EnrolleeProfile/GetEnrolleeBenefitsByCif_LensFrames?cifno=${cifNo}`
-//       );
-//       setOpticalBenefits(response.data);
-//     } catch (err) {
-//       console.error('Optical Benefits Fetch Error:', err);
-//       // Optionally set a partial error for optical benefits
-//       setError(prevError => ({
-//         ...prevError,
-//         optical: err
-//       }));
-//     }
-//   }, []);
-
-//   const fetchLensFrames = useCallback(async (cifNo) => {
-//     try {
-//       const response = await axios.get(
-//         `https://prognosis-api.leadwayhealth.com/api/EnrolleeProfile/GetEnrolleeBenefitsByCif_LensFrames?cifno=${cifNo}`
-//       );
-//       setLensFrames(response.data);
-//     } catch (err) {
-//       console.error('Lens Frames Fetch Error:', err);
-//       // Partial error for lens frames
-//       setError(prevError => ({
-//         ...prevError,
-//         lensFrames: err
-//       }));
-//     }
-//   }, []);
-
-//   const fetchSurgery = useCallback(async (cifNo) => {
-//     try {
-//       const response = await axios.get(
-//         `https://prognosis-api.leadwayhealth.com/api/EnrolleeProfile/GetEnrolleeBenefitsByCif_Surgery?cifno=${cifNo}`
-//       );
-//       setSurgery(response.data);
-//     } catch (err) {
-//       console.error('Surgery Fetch Error:', err);
-//       // Partial error for lens frames
-//       setError(prevError => ({
-//         ...prevError,
-//         surgery: err
-//       }));
-//     }
-//   }, []);
-
-//   const fetchVaccines = useCallback(async (cifNo) => {
-//     try {
-//       const response = await axios.get(
-//         `https://prognosis-api.leadwayhealth.com/api/EnrolleeProfile/GetEnrolleeBenefitsByCif_Vaccines?cifno=${cifNo}`
-//       );
-//       setVaccines(response.data);
-//     } catch (err) {
-//       console.error('Vaccines Fetch Error:', err);
-//       // Partial error for lens frames
-//       setError(prevError => ({
-//         ...prevError,
-//         vaccines: err
-//       }));
-//     }
-//   }, []);
-
-//   const fetchMajorDisease = useCallback(async (cifNo) => {
-//     try {
-//       const response = await axios.get(
-//         `https://prognosis-api.leadwayhealth.com/api/EnrolleeProfile/GetEnrolleeBenefitsByCif_MajorDisease?cifno=${cifNo}`
-//       );
-//       setMajorDisease(response.data);
-//     } catch (err) {
-//       console.error('MajorDisease Fetch Error:', err);
-//       // Partial error for lens frames
-//       setError(prevError => ({
-//         ...prevError,
-//         majorDisease: err
-//       }));
-//     }
-//   }, []);
-
-//   // Main effect to trigger fetching
-//   useEffect(() => {
-//     // Reset state when ID changes
-//     setDentalBenefits(null);
-//     setOpticalBenefits(null);
-//     setLensFrames(null);
-//     setSurgery(null);
-//     setVaccines(null);
-//     setMajorDisease(null);
-//     setError(null);
-//     setLoading(true);
-
-//     if (!id) {
-//       setLoading(false);
-//       return;
-//     }
-
-//     // Fetch benefits independently
-//     const fetchBenefits = async () => {
-//       const fetchPromises = [
-//         fetchOpticalBenefits(id),
-//         fetchDentalBenefits(id),
-//         fetchLensFrames(id),
-//         fetchSurgery(id),
-//         fetchVaccines(id),
-//         fetchMajorDisease(id),
-//       ];
-
-//       try {
-//         // Wait for both to complete, but they can resolve at different times
-//         await Promise.allSettled(fetchPromises);
-//       } catch (err) {
-//         console.error('Benefits Fetch Error:', err);
-//       } finally {
-//         // Set loading to false once both attempts have completed
-//         setLoading(false);
-//       }
-//     };
-
-//     fetchBenefits();
-//   }, [id, fetchDentalBenefits, fetchOpticalBenefits, fetchLensFrames, fetchSurgery, fetchVaccines, fetchMajorDisease]);
-
-//   // Determine overall loading state
-//   const isLoading = loading || (
-//     !dentalBenefits
-//     && !opticalBenefits
-//     && lensFrames
-//     && surgery
-//     && vaccines
-//     && majorDisease
-//   );
-
-//   return { 
-//     dentalBenefits, 
-//     opticalBenefits,
-//     lensFrames,
-//     surgery,
-//     vaccines,
-//     majorDisease,
-//     loading: isLoading, 
-//     error 
-//   };
-// };
-
-// // Benefits Component
-// const Benefits = () => {
-//   const { id } = useParams();
-//   const navigate = useNavigate();
-//   const { 
-//     dentalBenefits, 
-//     opticalBenefits,
-//     lensFrames,
-//     surgery,
-//     vaccines,
-//     majorDisease,
-//     loading, 
-//     error 
-//   } = useBenefits(id);
-
-//   // Error handling component
-//   const ErrorDisplay = () => {
-//     if (!error) return null;
-//     return (
-//       <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-//         {error.optical && (
-//           <div>
-//             <strong className="font-bold">Optical Benefits Error: </strong>
-//             <span className="block sm:inline">
-//               {error.optical.message || 'Failed to load optical benefits'}
-//             </span>
-//           </div>
-//         )}
-//         {error.dental && (
-//           <div>
-//             <strong className="font-bold">Dental Benefits Error: </strong>
-//             <span className="block sm:inline">
-//               {error.dental.message || 'Failed to load dental benefits'}
-//             </span>
-//           </div>
-//         )}
-//       </div>
-//     );
-//   };
-
-//   return (
-//     <>
-//       {error && <ErrorDisplay />}
-//       <BenefitsDashboard
-//         dentalBenefits={dentalBenefits}
-//         opticalBenefits={opticalBenefits}
-//         lensFrames={lensFrames}
-//         surgery={surgery}
-//         vaccines={vaccines}
-//         majorDisease={majorDisease}
-//         loading={loading}
-//         onChangeId={() => navigate('/')}
-//       />
-//     </>
-//   );
-// };
-
-// // App Component
-// const App = () => (
-//   <BrowserRouter>
-//     <Routes>
-//       <Route path="/" element={<EnrolleeModal />} />
-//       <Route path="/enrollee-benefits/:id" element={<Benefits />} />
-//     </Routes>
-//   </BrowserRouter>
-// );
-
-// export default App;
-
-
 import { BrowserRouter, Routes, Route, useNavigate, useParams } from 'react-router-dom';
 import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import EnrolleeModal from './components/EnrolleeModal';
 import BenefitsDashboard from './components/BenefitsDashboard';
+
+// Decoding function (matching the encoding in EnrolleeModal)
+const decodeId = (encodedId) => {
+  try {
+    // Add back padding if needed
+    const paddedEncodedId = encodedId + '==='.slice((encodedId.length + 3) % 4);
+    return atob(paddedEncodedId);
+  } catch (error) {
+    console.error('Decoding error:', error);
+    return null;
+  }
+};
 
 // Custom hook to fetch benefits with progressive loading
 const useBenefits = (id) => {
@@ -272,7 +36,7 @@ const useBenefits = (id) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Existing fetch functions...
+  // Fetch functions for first six benefits
   const fetchDentalBenefits = useCallback(async (cifNo) => {
     try {
       const response = await axios.get(
@@ -296,7 +60,6 @@ const useBenefits = (id) => {
       setOpticalBenefits(response.data);
     } catch (err) {
       console.error('Optical Benefits Fetch Error:', err);
-      // Optionally set a partial error for optical benefits
       setError(prevError => ({
         ...prevError,
         optical: err
@@ -312,7 +75,6 @@ const useBenefits = (id) => {
       setLensFrames(response.data);
     } catch (err) {
       console.error('Lens Frames Fetch Error:', err);
-      // Partial error for lens frames
       setError(prevError => ({
         ...prevError,
         lensFrames: err
@@ -328,7 +90,6 @@ const useBenefits = (id) => {
       setSurgery(response.data);
     } catch (err) {
       console.error('Surgery Fetch Error:', err);
-      // Partial error for lens frames
       setError(prevError => ({
         ...prevError,
         surgery: err
@@ -344,7 +105,6 @@ const useBenefits = (id) => {
       setVaccines(response.data);
     } catch (err) {
       console.error('Vaccines Fetch Error:', err);
-      // Partial error for lens frames
       setError(prevError => ({
         ...prevError,
         vaccines: err
@@ -360,7 +120,6 @@ const useBenefits = (id) => {
       setMajorDisease(response.data);
     } catch (err) {
       console.error('MajorDisease Fetch Error:', err);
-      // Partial error for lens frames
       setError(prevError => ({
         ...prevError,
         majorDisease: err
@@ -368,10 +127,9 @@ const useBenefits = (id) => {
     }
   }, []);
 
-  // New fetch functions for additional benefits
-  const fetchFertility = useCallback(async (cifNo) => {
+  // Mock fetch functions for additional benefits
+  const fetchFertility = useCallback(async () => {
     try {
-      // Placeholder API or mock data
       const mockResponse = {
         result: [{
           Limit: '0',
@@ -389,9 +147,8 @@ const useBenefits = (id) => {
     }
   }, []);
 
-  const fetchSpa = useCallback(async (cifNo) => {
+  const fetchSpa = useCallback(async () => {
     try {
-      // Placeholder API or mock data
       const mockResponse = {
         result: [{
           Limit: '0',
@@ -409,9 +166,8 @@ const useBenefits = (id) => {
     }
   }, []);
 
-  const fetchGym = useCallback(async (cifNo) => {
+  const fetchGym = useCallback(async () => {
     try {
-      // Placeholder API or mock data
       const mockResponse = {
         result: [{
           Limit: '0',
@@ -429,9 +185,8 @@ const useBenefits = (id) => {
     }
   }, []);
 
-  const fetchAnnualHealthCheck = useCallback(async (cifNo) => {
+  const fetchAnnualHealthCheck = useCallback(async () => {
     try {
-      // Placeholder API or mock data
       const mockResponse = {
         result: [{
           Limit: '0',
@@ -449,9 +204,8 @@ const useBenefits = (id) => {
     }
   }, []);
 
-  const fetchPhysiotherapy = useCallback(async (cifNo) => {
+  const fetchPhysiotherapy = useCallback(async () => {
     try {
-      // Placeholder API or mock data
       const mockResponse = {
         result: [{
           Limit: '0',
@@ -469,9 +223,8 @@ const useBenefits = (id) => {
     }
   }, []);
 
-  const fetchWardType = useCallback(async (cifNo) => {
+  const fetchWardType = useCallback(async () => {
     try {
-      // Placeholder API or mock data
       const mockResponse = {
         result: [{
           Limit: '0',
@@ -488,6 +241,7 @@ const useBenefits = (id) => {
       }));
     }
   }, []);
+  
 
   // Main effect to trigger fetching
   useEffect(() => {
@@ -525,13 +279,13 @@ const useBenefits = (id) => {
         fetchVaccines(id),
         fetchMajorDisease(id),
         
-        // New fetch promises
-        fetchFertility(id),
-        fetchSpa(id),
-        fetchGym(id),
-        fetchAnnualHealthCheck(id),
-        fetchPhysiotherapy(id),
-        fetchWardType(id)
+        // Mock fetch promises
+        fetchFertility(),
+        fetchSpa(),
+        fetchGym(),
+        fetchAnnualHealthCheck(),
+        fetchPhysiotherapy(),
+        fetchWardType()
       ];
 
       try {
@@ -598,8 +352,13 @@ const useBenefits = (id) => {
 
 // Benefits Component
 const Benefits = () => {
-  const { id } = useParams();
+  const { encodedEnrolleeId, encodedMemberUniqueID } = useParams();
   const navigate = useNavigate();
+
+  // Decode the IDs
+  const originalEnrolleeId = decodeId(encodedEnrolleeId);
+  const memberUniqueID = decodeId(encodedMemberUniqueID);
+
   const { 
     dentalBenefits, 
     opticalBenefits,
@@ -615,7 +374,7 @@ const Benefits = () => {
     wardType,
     loading, 
     error 
-  } = useBenefits(id);
+  } = useBenefits(memberUniqueID);
 
   // Error handling component
   const ErrorDisplay = () => {
@@ -633,6 +392,13 @@ const Benefits = () => {
       </div>
     );
   };
+
+  // Redirect if decoding fails
+  useEffect(() => {
+    if (!originalEnrolleeId || !memberUniqueID) {
+      navigate('/');
+    }
+  }, [originalEnrolleeId, memberUniqueID, navigate]);
 
   return (
     <>
@@ -662,7 +428,7 @@ const App = () => (
   <BrowserRouter>
     <Routes>
       <Route path="/" element={<EnrolleeModal />} />
-      <Route path="/enrollee-benefits/:id" element={<Benefits />} />
+      <Route path="/enrollee-benefits/:encodedEnrolleeId/:encodedMemberUniqueID" element={<Benefits />} />
     </Routes>
   </BrowserRouter>
 );
