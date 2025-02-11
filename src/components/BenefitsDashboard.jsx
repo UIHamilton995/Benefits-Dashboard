@@ -280,7 +280,7 @@ const BenefitsDashboard = ({
   const memberInfo = enrolleeInfo?.result?.[0];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
       <EnrolleeHomePage />
       <div className="fixed inset-0 -z-10">
         <div className="absolute top-20 left-20 w-32 h-32 bg-blue-200 rounded-full blur-xl opacity-60 animate-pulse"></div>
