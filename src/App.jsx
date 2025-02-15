@@ -59,8 +59,17 @@ const Benefits = () => {
           ...annualHealthChecksData.data,
           result: annualHealthChecksData.data.result.map(item => ({
             ...item,
-            AnnualHealthChecks: item.AnnualHealthChecks || 'None',
-            Limit: item.AnnualHealthChecks || 'None',
+            AnnualHealthChecks: item.AnnualHealthChecks || 'Unavailable',
+            Limit: item.AnnualHealthChecks || 'Unavailable',
+          }))
+        };
+
+        // Process vaccines data to handle text content
+        const processedVaccines = {
+          ...vaccinesData.data,
+          result: vaccinesData.data.result.map(item => ({
+            ...item,
+            Limit: item.Limit || item.VaccineLimit || 'Available' // Fallback to VaccineLimit or 'Available'
           }))
         };
 
@@ -82,7 +91,7 @@ const Benefits = () => {
           ...adminDrivenBenefitsData.data,
           result: adminDrivenBenefitsData.data.result.map(item => ({
             ...item,
-            Limit: item.Limit === "0" ? "None" : item.Limit
+            Limit: item.Limit === "0" ? "Unavailable" : item.Limit
           }))
         };
 
@@ -90,7 +99,7 @@ const Benefits = () => {
           dentalBenefits: dentalData.data,
           lensFrames: lensData.data,
           surgery: surgeryData.data,
-          vaccines: vaccinesData.data,
+          vaccines: processedVaccines,
           majorDisease: majorDiseaseData.data,
           annualHealthCheck: processedAnnualHealthChecks,
           roomType: roomTypeBenefit,

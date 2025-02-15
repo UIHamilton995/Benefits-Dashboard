@@ -19,7 +19,7 @@ const EnrolleeModal = () => {
     e.preventDefault();
     
     // Validate ID format
-    const idPattern = /^\d+\/0$/;
+    const idPattern = /^\d+\/\d$/;
     if (!idPattern.test(enrolleeId.trim())) {
       setError('Invalid ID format. Use format like 99999999/0');
       return;
