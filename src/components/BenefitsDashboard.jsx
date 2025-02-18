@@ -1,20 +1,5 @@
-import { 
-  FaTooth, 
-  FaUser,
-  FaSpinner,
-  FaWallet,
-  FaGlasses,
-  FaHospital,
-  FaSyringe,
-  FaBriefcaseMedical,
-  FaHeartbeat,
-  FaBed,
-  FaUserNurse,
-  FaChevronDown,
-  FaChevronUp,
-  FaEllipsisH
-} from 'react-icons/fa';
 import { useState } from 'react';
+import { FaTooth, FaUser, FaSpinner, FaWallet, FaGlasses, FaHospital, FaSyringe, FaBriefcaseMedical, FaHeartbeat, FaBed, FaUserNurse, FaChevronDown, FaChevronUp, FaEllipsisH } from 'react-icons/fa';
 import EnrolleeHomePage from './EnrolleeHomePage';
 
 const BenefitsDashboard = ({ 
@@ -31,7 +16,18 @@ const BenefitsDashboard = ({
   loading, 
   onChangeId 
 }) => {
+  const [showVaccines, setShowVaccines] = useState(false);
+  const [showAnnualHealthChecks, setShowAnnualHealthChecks] = useState(false);
   const [showAdditionalBenefits, setShowAdditionalBenefits] = useState(false);
+
+
+  const toggleVaccines = () => {
+    setShowVaccines(!showVaccines);
+  };
+
+  const toggleAnnualHealthChecks = () => {
+    setShowAnnualHealthChecks(!showAnnualHealthChecks);
+  };
 
   const parseNumber = (value) => {
     return typeof value === 'string' 
@@ -68,23 +64,11 @@ const BenefitsDashboard = ({
       icon: FaHospital,
       color: 'text-red-600 bg-red-50'
     })),
-    ...(vaccines?.result || []).map(benefit => ({
-      ...benefit,
-      type: 'Vaccines',
-      icon: FaSyringe,
-      color: 'text-purple-600 bg-purple-50'
-    })),
     ...(majorDisease?.result || []).map(benefit => ({
       ...benefit,
       type: 'Major Disease',
       icon: FaBriefcaseMedical,
       color: 'text-yellow-600 bg-yellow-50'
-    })),
-    ...(annualHealthCheck?.result || []).map(benefit => ({
-      ...benefit,
-      type: 'Annual Health Check',
-      icon: FaHeartbeat,
-      color: 'text-emerald-600 bg-emerald-50'
     })),
     ...(telemedicine?.result || []).map(benefit => ({
       ...benefit,
@@ -172,7 +156,53 @@ const BenefitsDashboard = ({
                       </td>
                     </tr>
                   ))}
-                  
+
+                  {/* Vaccines Dropdown */}
+                  {vaccines?.result?.length > 0 && (
+                    <tr className="border-b hover:bg-gray-50 transition-colors cursor-pointer">
+                      <td
+                        onClick={toggleVaccines}
+                        className="p-4"
+                      >
+                        <div className="flex items-center gap-3">
+                          <FaSyringe className="w-8 h-8 text-purple-600 bg-purple-50 p-1 rounded-full" />
+                          <span className="font-semibold text-gray-800">Vaccines</span>
+                        </div>
+                      </td>
+                      <td className="p-4 text-left font-medium text-gray-700">
+                        {showVaccines ? <FaChevronUp className="w-4 h-4 text-gray-500" /> : <FaChevronDown className="w-4 h-4 text-gray-500" />}
+                      </td>
+                    </tr>
+                  )}
+                  {showVaccines && vaccines.result && (
+                    <tr className="border-b bg-gray-100">
+                      <td colSpan={2} className="p-4 text-gray-800">{vaccines.result[0].Vaccines}</td>
+                    </tr>
+                  )}
+
+                  {/* Annual Health Checks Dropdown */}
+                  {annualHealthCheck?.result?.length > 0 && (
+                    <tr className="border-b hover:bg-gray-50 transition-colors cursor-pointer">
+                      <td
+                        onClick={toggleAnnualHealthChecks}
+                        className="p-4"
+                      >
+                        <div className="flex items-center gap-3">
+                          <FaHeartbeat className="w-8 h-8 text-emerald-600 bg-emerald-50 p-1 rounded-full" />
+                          <span className="font-semibold text-gray-800">Annual Health Checks</span>
+                        </div>
+                      </td>
+                      <td className="p-4 text-left font-medium text-gray-700">
+                        {showAnnualHealthChecks ? <FaChevronUp className="w-4 h-4 text-gray-500" /> : <FaChevronDown className="w-4 h-4 text-gray-500" />}
+                      </td>
+                    </tr>
+                  )}
+                  {showAnnualHealthChecks && annualHealthCheck.result && (
+                    <tr className="border-b bg-gray-100">
+                      <td colSpan={2} className="p-4 text-gray-800">{annualHealthCheck.result[0].AnnualHealthChecks}</td>
+                    </tr>
+                  )}
+
                   {additionalBenefits?.result?.length > 0 && (
                     <tr 
                       onClick={() => setShowAdditionalBenefits(!showAdditionalBenefits)}

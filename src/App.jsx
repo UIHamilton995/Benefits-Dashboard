@@ -59,8 +59,7 @@ const Benefits = () => {
           ...annualHealthChecksData.data,
           result: annualHealthChecksData.data.result.map(item => ({
             ...item,
-            AnnualHealthChecks: item.AnnualHealthChecks || 'Unavailable',
-            Limit: item.AnnualHealthChecks || 'Unavailable',
+            Limit: item.Limit === "0" ? "Covered" : item.Limit
           }))
         };
 
@@ -69,7 +68,7 @@ const Benefits = () => {
           ...vaccinesData.data,
           result: vaccinesData.data.result.map(item => ({
             ...item,
-            Limit: item.Limit || item.VaccineLimit || 'Available' // Fallback to VaccineLimit or 'Available'
+            Limit: item.Limit === "0" ? "Covered" : item.Limit
           }))
         };
 
@@ -82,7 +81,7 @@ const Benefits = () => {
         // Static telemedicine benefit
         const telemedicineBenefit = {
           result: [{
-            Limit: 'Available',
+            Limit: 'Covered',
           }]
         };
 
@@ -91,7 +90,7 @@ const Benefits = () => {
           ...adminDrivenBenefitsData.data,
           result: adminDrivenBenefitsData.data.result.map(item => ({
             ...item,
-            Limit: item.Limit === "0" ? "Unavailable" : item.Limit
+            Limit: item.Limit === "0" ? "Covered" : item.Limit
           }))
         };
 
