@@ -159,11 +159,10 @@ const BenefitsDashboard = ({
 
                   {/* Vaccines Dropdown */}
                   {vaccines?.result?.length > 0 && (
-                    <tr className="border-b hover:bg-gray-50 transition-colors cursor-pointer">
-                      <td
+                      <tr className="border-b hover:bg-gray-50 transition-colors cursor-pointer"
                         onClick={toggleVaccines}
-                        className="p-4"
                       >
+                      <td className="p-4">
                         <div className="flex items-center gap-3">
                           <FaSyringe className="w-8 h-8 text-purple-600 bg-purple-50 p-1 rounded-full" />
                           <span className="font-semibold text-gray-800">Vaccines</span>
@@ -182,11 +181,10 @@ const BenefitsDashboard = ({
 
                   {/* Annual Health Checks Dropdown */}
                   {annualHealthCheck?.result?.length > 0 && (
-                    <tr className="border-b hover:bg-gray-50 transition-colors cursor-pointer">
-                      <td
-                        onClick={toggleAnnualHealthChecks}
-                        className="p-4"
-                      >
+                    <tr className="border-b hover:bg-gray-50 transition-colors cursor-pointer"
+                      onClick={toggleAnnualHealthChecks}
+                    >
+                      <td className="p-4">
                         <div className="flex items-center gap-3">
                           <FaHeartbeat className="w-8 h-8 text-emerald-600 bg-emerald-50 p-1 rounded-full" />
                           <span className="font-semibold text-gray-800">Annual Health Checks</span>
