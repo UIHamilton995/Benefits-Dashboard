@@ -104,6 +104,15 @@ const BenefitsDashboard = ({
               <p className="text-sm font-bold text-gray-600 mt-1">
                 Plan: {memberInfo.Member_Plan || 'Standard'}
               </p>
+              <p className="text-sm font-bold text-gray-600 mt-1">
+                Status: {memberInfo.Member_MemberStatus_Description || 'Deactivated'}
+              </p>
+              <p className="text-sm font-bold text-gray-600 mt-1">
+                Mail: {memberInfo.Member_EmailAddress_One || 'None'}
+              </p>
+              <p className="text-sm font-bold text-gray-600 mt-1">
+                Phone: {memberInfo.Member_Phone_Three || 'None'}
+              </p>
             </div>
           )}
           <button
