@@ -111,7 +111,7 @@ const BenefitsDashboard = ({
                 Mail: {memberInfo.Member_EmailAddress_One || 'None'}
               </p>
               <p className="text-sm font-bold text-gray-600 mt-1">
-                Phone: {memberInfo.Member_Phone_Three || 'None'}
+                Phone: {memberInfo.Member_Phone_One || 'None'}
               </p>
             </div>
           )}
