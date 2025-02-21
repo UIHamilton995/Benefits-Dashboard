@@ -2,7 +2,7 @@ import logo from '../assets/Leadway Health Logo.svg'
 
 const EnrolleeHomePage = () => {
   return (
-    <div className="max-w-5xl mx-auto">
+    <div className="max-w-7xl mx-auto">
       {/* Header */}
       <div className="mb-2">
         <img src={logo} alt="Leadway Health Logo" />

@@ -47,7 +47,7 @@ const Benefits = () => {
           axios.get(`https://prognosis-api.leadwayhealth.com/api/EnrolleeProfile/GetEnrolleeBioDataByEnrolleeID?enrolleeid=${originalEnrolleeId}`),
           axios.get(`https://prognosis-api.leadwayhealth.com/api/EnrolleeProfile/GetEnrolleeBenefitsByCif_Dental?cifno=${memberUniqueID}`),
           axios.get(`https://prognosis-api.leadwayhealth.com/api/EnrolleeProfile/GetEnrolleeBenefitsByCif_LensFrames?cifno=${memberUniqueID}`),
-          axios.get(`https://prognosis-api.leadwayhealth.com/api/EnrolleeProfile/GetEnrolleeBenefitsB yCif_Surgery?cifno=${memberUniqueID}`),
+          axios.get(`https://prognosis-api.leadwayhealth.com/api/EnrolleeProfile/GetEnrolleeBenefitsByCif_Surgery?cifno=${memberUniqueID}`),
           axios.get(`https://prognosis-api.leadwayhealth.com/api/EnrolleeProfile/GetEnrolleeBenefitsByCif_Vaccines?cifno=${memberUniqueID}`),
           axios.get(`https://prognosis-api.leadwayhealth.com/api/EnrolleeProfile/GetEnrolleeBenefitsByCif_MajorDisease?cifno=${memberUniqueID}`),
           axios.get(`https://prognosis-api.leadwayhealth.com/api/EnrolleeProfile/GetEnrolleeBenefitsByCif_AnnualHealthChecks?cifno=${memberUniqueID}`),
