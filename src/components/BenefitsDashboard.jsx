@@ -1,5 +1,20 @@
-import { useState } from 'react';
-import { FaTooth, FaUser, FaSpinner, FaWallet, FaGlasses, FaHospital, FaSyringe, FaBriefcaseMedical, FaHeartbeat, FaBed, FaUserNurse, FaChevronDown, FaChevronUp, FaEllipsisH } from 'react-icons/fa';
+import { useState, useMemo } from 'react';
+import { 
+  FaTooth, 
+  FaUser, 
+  FaSpinner, 
+  FaWallet, 
+  FaGlasses, 
+  FaHospital, 
+  FaSyringe, 
+  FaBriefcaseMedical, 
+  FaHeartbeat, 
+  FaBed, 
+  FaUserNurse, 
+  FaChevronDown, 
+  FaChevronUp, 
+  FaEllipsisH 
+} from 'react-icons/fa';
 import EnrolleeHomePage from './EnrolleeHomePage';
 
 const BenefitsDashboard = ({ 
@@ -20,14 +35,8 @@ const BenefitsDashboard = ({
   const [showAnnualHealthChecks, setShowAnnualHealthChecks] = useState(false);
   const [showAdditionalBenefits, setShowAdditionalBenefits] = useState(false);
 
-
-  const toggleVaccines = () => {
-    setShowVaccines(!showVaccines);
-  };
-
-  const toggleAnnualHealthChecks = () => {
-    setShowAnnualHealthChecks(!showAnnualHealthChecks);
-  };
+  const toggleVaccines = () => setShowVaccines(!showVaccines);
+  const toggleAnnualHealthChecks = () => setShowAnnualHealthChecks(!showAnnualHealthChecks);
 
   const parseNumber = (value) => {
     return typeof value === 'string' 
@@ -45,44 +54,78 @@ const BenefitsDashboard = ({
     }).format(numValue);
   };
 
-  const combinedBenefits = [
-    ...(dentalBenefits?.result || []).map(benefit => ({
-      ...benefit,
-      type: 'Dental',
-      icon: FaTooth,
-      color: 'text-blue-600 bg-blue-50'
-    })),
-    ...(lensFrames?.result || []).map(benefit => ({
-      ...benefit,
-      type: 'Lens Frames',
-      icon: FaGlasses,
-      color: 'text-green-600 bg-green-50'
-    })),
-    ...(surgery?.result || []).map(benefit => ({
-      ...benefit,
-      type: 'Surgery',
-      icon: FaHospital,
-      color: 'text-red-600 bg-red-50'
-    })),
-    ...(majorDisease?.result || []).map(benefit => ({
-      ...benefit,
-      type: 'Major Disease',
-      icon: FaBriefcaseMedical,
-      color: 'text-yellow-600 bg-yellow-50'
-    })),
-    ...(telemedicine?.result || []).map(benefit => ({
-      ...benefit,
-      type: 'TeleMedicine',
-      icon: FaUserNurse,
-      color: 'text-blue-600 bg-rose-100'
-    })),
-    ...(roomType?.result || []).map(benefit => ({
-      ...benefit,
-      type: 'Room Type',
-      icon: FaBed,
-      color: 'text-rose-600 bg-rose-50'
-    })),
-  ];
+  // Memoize the combined benefits to prevent unnecessary recalculations
+  const combinedBenefits = useMemo(() => {
+    const benefitsConfig = [
+      {
+        data: dentalBenefits?.result,
+        type: 'Dental',
+        icon: FaTooth,
+        color: 'text-blue-600 bg-blue-50',
+        key: 'dental'
+      },
+      {
+        data: lensFrames?.result,
+        type: 'Lens Frames',
+        icon: FaGlasses,
+        color: 'text-green-600 bg-green-50',
+        key: 'lensFrames'
+      },
+      {
+        data: surgery?.result,
+        type: 'Surgery',
+        icon: FaHospital,
+        color: 'text-red-600 bg-red-50',
+        key: 'surgery'
+      },
+      {
+        data: majorDisease?.result,
+        type: 'Major Disease',
+        icon: FaBriefcaseMedical,
+        color: 'text-yellow-600 bg-yellow-50',
+        key: 'majorDisease'
+      },
+      {
+        data: telemedicine?.result,
+        type: 'TeleMedicine',
+        icon: FaUserNurse,
+        color: 'text-blue-600 bg-rose-100',
+        key: 'telemedicine'
+      },
+      {
+        data: roomType?.result,
+        type: 'Room Type',
+        icon: FaBed,
+        color: 'text-rose-600 bg-rose-50',
+        key: 'roomType'
+      }
+    ];
+
+    return benefitsConfig
+      .filter(config => config.data && config.data.length > 0)
+      .map(config => ({
+        ...config.data[0],
+        type: config.type,
+        icon: config.icon,
+        color: config.color,
+        key: config.key
+      }));
+  }, [dentalBenefits, lensFrames, surgery, majorDisease, telemedicine, roomType]);
+
+  // Memoize and deduplicate additional benefits
+  const uniqueAdditionalBenefits = useMemo(() => {
+    if (!additionalBenefits?.result) return [];
+    
+    // Create a Map using Benefit as the key to ensure uniqueness
+    const benefitsMap = new Map();
+    additionalBenefits.result.forEach(benefit => {
+      if (!benefitsMap.has(benefit.Benefit)) {
+        benefitsMap.set(benefit.Benefit, benefit);
+      }
+    });
+    
+    return Array.from(benefitsMap.values());
+  }, [additionalBenefits]);
 
   const memberInfo = enrolleeInfo?.result?.[0];
 
@@ -145,9 +188,9 @@ const BenefitsDashboard = ({
                   </tr>
                 </thead>
                 <tbody>
-                  {combinedBenefits.map((benefit, index) => (
+                  {combinedBenefits.map((benefit) => (
                     <tr 
-                      key={index} 
+                      key={benefit.key} 
                       className="border-b hover:bg-gray-50 transition-colors"
                     >
                       <td className="p-4">
@@ -168,9 +211,10 @@ const BenefitsDashboard = ({
 
                   {/* Vaccines Dropdown */}
                   {vaccines?.result?.length > 0 && (
-                      <tr className="border-b hover:bg-gray-50 transition-colors cursor-pointer"
-                        onClick={toggleVaccines}
-                      >
+                    <tr 
+                      className="border-b hover:bg-gray-50 transition-colors cursor-pointer"
+                      onClick={toggleVaccines}
+                    >
                       <td className="p-4">
                         <div className="flex items-center gap-3">
                           <FaSyringe className="w-8 h-8 text-purple-600 bg-purple-50 p-1 rounded-full" />
@@ -182,7 +226,7 @@ const BenefitsDashboard = ({
                       </td>
                     </tr>
                   )}
-                  {showVaccines && vaccines.result && (
+                  {showVaccines && vaccines?.result?.[0] && (
                     <tr className="border-b bg-gray-100">
                       <td colSpan={2} className="p-4 text-gray-800">{vaccines.result[0].Vaccines}</td>
                     </tr>
@@ -190,7 +234,8 @@ const BenefitsDashboard = ({
 
                   {/* Annual Health Checks Dropdown */}
                   {annualHealthCheck?.result?.length > 0 && (
-                    <tr className="border-b hover:bg-gray-50 transition-colors cursor-pointer"
+                    <tr 
+                      className="border-b hover:bg-gray-50 transition-colors cursor-pointer"
                       onClick={toggleAnnualHealthChecks}
                     >
                       <td className="p-4">
@@ -204,13 +249,14 @@ const BenefitsDashboard = ({
                       </td>
                     </tr>
                   )}
-                  {showAnnualHealthChecks && annualHealthCheck.result && (
+                  {showAnnualHealthChecks && annualHealthCheck?.result?.[0] && (
                     <tr className="border-b bg-gray-100">
                       <td colSpan={2} className="p-4 text-gray-800">{annualHealthCheck.result[0].AnnualHealthChecks}</td>
                     </tr>
                   )}
 
-                  {additionalBenefits?.result?.length > 0 && (
+                  {/* Additional Benefits Section */}
+                  {uniqueAdditionalBenefits.length > 0 && (
                     <tr 
                       onClick={() => setShowAdditionalBenefits(!showAdditionalBenefits)}
                       className="border-b hover:bg-gray-50 transition-colors cursor-pointer"
@@ -230,7 +276,7 @@ const BenefitsDashboard = ({
                         </div>
                       </td>
                       <td className="p-4 text-left font-medium text-gray-700">
-                        {additionalBenefits.result.length} Additional Benefits
+                        {uniqueAdditionalBenefits.length} Additional Benefits
                       </td>
                     </tr>
                   )}
@@ -239,7 +285,7 @@ const BenefitsDashboard = ({
             </div>
 
             {/* Additional Benefits Expanded View */}
-            {showAdditionalBenefits && additionalBenefits?.result?.length > 0 && (
+            {showAdditionalBenefits && uniqueAdditionalBenefits.length > 0 && (
               <div className="bg-white shadow-lg rounded-2xl overflow-hidden transition-all duration-300">
                 <table className="w-full">
                   <thead className="bg-amber-50">
@@ -249,9 +295,9 @@ const BenefitsDashboard = ({
                     </tr>
                   </thead>
                   <tbody>
-                    {additionalBenefits.result.map((benefit, index) => (
+                    {uniqueAdditionalBenefits.map((benefit, index) => (
                       <tr 
-                        key={index}
+                        key={`${benefit.Benefit}-${index}`}
                         className="border-b hover:bg-gray-50 transition-colors"
                       >
                         <td className="p-4 text-gray-800">{benefit.Benefit}</td>
