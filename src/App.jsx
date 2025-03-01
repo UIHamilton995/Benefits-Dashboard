@@ -59,7 +59,9 @@ const Benefits = () => {
           ...annualHealthChecksData.data,
           result: annualHealthChecksData.data.result.map(item => ({
             ...item,
-            Limit: item.Limit === "0" ? "Covered" : item.Limit
+            Limit: item.Limit === "0" ? "Covered" : item.Limit,
+            Balance: item.Balance === "0" ? "Not Available" : item.Balance,
+            Used: item.Used === "0" ? "Not Available" : item.Used
           }))
         };
 
