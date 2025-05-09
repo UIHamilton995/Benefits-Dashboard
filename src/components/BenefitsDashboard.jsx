@@ -468,7 +468,7 @@ const BenefitsDashboard = ({
   const memberInfo = enrolleeInfo?.result?.[0];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-3">
       <EnrolleeHomePage />
       <div className="fixed inset-0 -z-10">
         <div className="absolute top-20 left-20 w-32 h-32 bg-blue-200 rounded-full blur-xl opacity-60 animate-pulse"></div>
@@ -476,22 +476,25 @@ const BenefitsDashboard = ({
       </div>
 
       <div className="max-w-7xl mx-auto">
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center justify-between mb-6">
           {memberInfo && (
             <div>
               <h2 className="text-xl font-semibold text-gray-800">
                 {memberInfo.Member_FirstName} {memberInfo.Member_Surname}
               </h2>
-              <p className="text-sm font-bold text-gray-600 mt-1">
+              <p className="text-sm font-bold text-gray-600">
+                Mail: {memberInfo.Member_EnrolleeID || 'None'}
+              </p>
+              <p className="text-sm font-bold text-gray-600">
                 Plan: {memberInfo.Member_Plan || 'Standard'}
               </p>
-              <p className="text-sm font-bold text-gray-600 mt-1">
+              <p className="text-sm font-bold text-gray-600">
                 Status: {memberInfo.Member_MemberStatus_Description || 'Deactivated'}
               </p>
-              <p className="text-sm font-bold text-gray-600 mt-1">
+              <p className="text-sm font-bold text-gray-600">
                 Mail: {memberInfo.Member_EmailAddress_One || 'None'}
               </p>
-              <p className="text-sm font-bold text-gray-600 mt-1">
+              <p className="text-sm font-bold text-gray-600">
                 Phone: {memberInfo.Member_Phone_One || 'None'}
               </p>
             </div>
