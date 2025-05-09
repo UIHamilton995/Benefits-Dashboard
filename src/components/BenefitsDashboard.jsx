@@ -483,7 +483,7 @@ const BenefitsDashboard = ({
                 {memberInfo.Member_FirstName} {memberInfo.Member_Surname}
               </h2>
               <p className="text-sm font-bold text-gray-600">
-                Mail: {memberInfo.Member_EnrolleeID || 'None'}
+                Code: {memberInfo.Member_EnrolleeID || 'None'}
               </p>
               <p className="text-sm font-bold text-gray-600">
                 Plan: {memberInfo.Member_Plan || 'Standard'}
